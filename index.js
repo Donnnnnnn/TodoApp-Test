@@ -57,19 +57,19 @@ app.post('/addtask', function (req, res) {
     res.redirect("/");
 });
 
-
+app.delete("/removetask", function(req, res) {
+  TodoTask.forge({
+    Task: req.body.check
+  }).fetch({require: true}).then(function(task) {
+    task.destroy()
+  })
+})
 //the completed task array with initial placeholders for removed task
 var complete = ["finish jquery"];
 app.post("/removetask", function(req, res) {
     CompletedTask.forge({
       completedTask:req.body.check
     }).save()
-    TodoTask.forge({
-      Task: req.body.check
-    }).fetch({require: true}).then(function(task) {
-      task.destroy()
-    })
-    
      var completeTask = req.body.check;
 //check for the "typeof" the different completed task, then add into the complete task
 if (typeof completeTask === "string") {
@@ -83,6 +83,7 @@ if (typeof completeTask === "string") {
 }
    res.redirect("/");
 });
+
 //the server is listening on port 3000 for connections
 app.listen(3000, function () {
   console.log('Example app listening on port 3000!')
